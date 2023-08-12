@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Navbar = () => {
-  const isUserLoggedIn = true;
+  const { data: session } = useSession();
 
   const [providers, setProviders] = useState(null);
   const [toggle, setToggle] = useState(false);
@@ -13,13 +13,13 @@ const Navbar = () => {
   useEffect(() => {
     const setProvider = async () => {
       const response = await getProviders();
-
       setProviders(response);
     };
     setProvider();
-  });
+  }, [providers]);
 
-  // console.log(providers);
+  //console.log(providers);
+  //console.log(session);
 
   return (
     <nav className="flex-between mb-16 pt-3 w-full">
@@ -33,11 +33,11 @@ const Navbar = () => {
         />
       </Link>
 
-      {/* Mobile Navigation */}
+      {/* Desktop Navigation */}
       <div className="sm:flex hidden">
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className="flex gap-3 md:gap-5">
-            <Link href="/create-prompt" className="black_btn">
+            <Link href="/createPrompt" className="black_btn">
               Create
             </Link>
             <button type="button" className="outline_btn" onClick={signOut}>
@@ -45,7 +45,7 @@ const Navbar = () => {
             </button>
             <Link href="/profile">
               <Image
-                src="/assets/images/logo.svg"
+                src={session?.user.image}
                 className="rounded-full"
                 alt=""
                 width={37}
@@ -57,14 +57,16 @@ const Navbar = () => {
           <>
             {providers &&
               Object.values(providers).map((provider) => {
-                <button
-                  className="black_btn"
-                  type="button"
-                  key={provider.name}
-                  onClick={() => signIn(provider.id)}
-                >
-                  Sign In
-                </button>;
+                return (
+                  <button
+                    className="black_btn"
+                    type="button"
+                    key={provider.name}
+                    onClick={() => signIn(provider.id)}
+                  >
+                    Sign In
+                  </button>
+                );
               })}
           </>
         )}
@@ -72,10 +74,10 @@ const Navbar = () => {
 
       {/* Mobile Navigation */}
       <div className="sm:hidden flex relative">
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className="flex">
             <Image
-              src="/assets/images/logo.svg"
+              src={session?.user.image}
               className="rounded-full"
               alt=""
               width={37}
@@ -93,7 +95,7 @@ const Navbar = () => {
                   My Profile
                 </Link>
                 <Link
-                  href="/create-prompt"
+                  href="/createPrompt"
                   className="dropdown_link"
                   onClick={() => setToggle(false)}
                 >
@@ -115,6 +117,7 @@ const Navbar = () => {
           <>
             {providers &&
               Object.values(providers).map((provider) => {
+                //object.values diziye dönüştürür.
                 <button
                   className="black_btn"
                   type="button"
