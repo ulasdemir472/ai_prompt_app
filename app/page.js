@@ -13,7 +13,6 @@ export default function Home() {
         Promptopia is a open-source AI prompting tool for modern world to
         discover ,create and share creative prompts
       </p>
-
       <Feed />
     </section>
   );
