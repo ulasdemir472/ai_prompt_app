@@ -1,7 +1,7 @@
 import Prompt from "@/models/prompt";
 import { connectToDb } from "@/utils/db";
 
-export const GET = async (req, { params }) => {
+export const GET = async (request, { params }) => {
   try {
     await connectToDb();
     const post = await Prompt.findById(params.id).populate("creator");
@@ -34,12 +34,12 @@ export const PATCH = async (request, { params }) => {
   }
 };
 
-export const DELETE = async ({ params }) => {
+export const DELETE = async (request, { params }) => {
   try {
     await connectToDb();
-
-    await Prompt.findByIdAndRemove(params.id);
-
+    console.log(params.id);
+    await Prompt.findByIdAndDelete(params.id);
+    console.log("check");
     return new Response("Delete prompt succesfully!", { status: 200 });
   } catch (error) {
     return new Response("Failed to delete prompt!", { status: 500 });
