@@ -23,7 +23,7 @@ const Navbar = () => {
 
   return (
     <nav className="flex-between mb-16 pt-3 w-full">
-      <Link href="" className="flex gap-2 flex-center">
+      <Link href="/" className="flex gap-2 flex-center">
         <Image
           src="/assets/images/logo.svg"
           width={30}
